@@ -10,6 +10,10 @@ if [ $# -eq 1 ] && [ "$@" = "bash" ]; then
   exec "$@"
 fi
 
+if test -f "$JOTTA_TOKEN_FILE"; then
+  JOTTA_TOKEN=`cat $JOTTA_TOKEN_FILE`
+fi
+
 # chown jottad /var/lib/jottad -R
 mkdir -p /data/jottad
 ln -sfn /data/jottad /root/.jottad
