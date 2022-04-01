@@ -1,14 +1,13 @@
-FROM ubuntu:20.04
-LABEL maintainer="bluet@bluet.org"
+FROM ubuntu:22.04
 
 VOLUME [ "/data" ]
 
 ENV JOTTA_TOKEN="**None**" \
-    JOTTA_DEVICE="**docker-jottacloud**" \
-    JOTTA_SCANINTERVAL="12h"\
-    LOCALTIME="Asia/Taipei" \
-    STARTUP_TIMEOUT=15 \
-    JOTTAD_SYSTEMD=0
+	JOTTA_DEVICE="**docker-jottacloud**" \
+	JOTTA_SCANINTERVAL="12h"\
+	LOCALTIME="Europe/Oslo" \
+	STARTUP_TIMEOUT=15 \
+	JOTTAD_SYSTEMD=0
 
 RUN apt-get update -y &&\
 	apt-get upgrade -y &&\
@@ -20,7 +19,6 @@ RUN apt-get update -y &&\
 	apt-get autoremove -y --purge &&\
 	apt-get clean &&\
 	rm -rf /var/lib/lists/*
-
 
 COPY entrypoint.sh /src/
 WORKDIR /src

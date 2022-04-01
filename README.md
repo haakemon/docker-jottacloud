@@ -9,22 +9,21 @@ Support platforms: linux/amd64, linux/arm64
 https://docs.jottacloud.com/en/articles/1461561-release-notes-for-jottacloud-cli
 
 ## Repository
-- GitHub: [bluet/docker-jottacloud](https://github.com/bluet/docker-jottacloud/)
-- DockerHub: [bluet/jottacloud](https://hub.docker.com/r/bluet/jottacloud)
+- GitHub: [haakemon/docker-jottacloud](https://github.com/haakemon/docker-jottacloud/)
 
 ```
-docker pull bluet/jottacloud
+docker pull ghcr.io/haakemon/docker-jottacloud:latest
 ```
 
 ## Use
-`docker run bluet/jottacloud`
+`docker run haakemon/docker-jottacloud`
 ```
 docker run \
    -e JOTTA_TOKEN=XXXXX \
    -e JOTTA_DEVICE=YYYY \
    -v /dockerdata/jottacloud/config:/data/jottad \
    -v /home/:/backup/home \
-   bluet/jottacloud
+   haakemon/docker-jottacloud
 ```
 ```
 docker run \
@@ -37,12 +36,12 @@ docker run \
    -v /data/jottacloud/jotta-cli.env:/data/jotta-cli/jotta-cli.env \
    -v /home/:/backup/home \
    --name jottacloud \
-   bluet/jottacloud
+   haakemon/docker-jottacloud
 ```
 
 For debugging:
 ```
-docker run -it bluet/jottacloud bash
+docker run -it haakemon/docker-jottacloud bash
 ```
 ```
 docker exec -it jottacloud bash
@@ -75,8 +74,6 @@ To do so, jotta-cli supports two different ways:
 - Folder specific excludes
   - Put a `.jottaignore` in that folder.
 
-You can also check my sample [.jottaignore](https://github.com/bluet/docker-jottacloud/blob/main/.jottaignore) file.
-
 **Syntax / Pattern**: `.ignore`, `ignorefile`, and `.jottaignore` are `.gitignore` compatible.  You can check templates in [github/gitignore](https://github.com/github/gitignore) or use [Gitignore.io](https://gitignore.io) to generate one for you.
 
 **NOTE**: Adding a new pattern will also apply to files already backup. If you already have a backup which contains `/foo/bar/` and later adds a new pattern `bar/` in ignore list, the `bar/` folder will be removed from all your previous backups and moved to Trash.
@@ -90,4 +87,4 @@ You can also check my sample [.jottaignore](https://github.com/bluet/docker-jott
 - [Ignoring files and folders from backup with Jottacloud CLI](https://docs.jottacloud.com/en/articles/1437235-ignoring-files-and-folders-from-backup-with-jottacloud-cli)
 
 ## Credit
-This is a fork with fixes from [maaximal/jottadocker](https://github.com/maaximal/jottadocker)
+This is a fork from [bluet/docker-jottacloud](https://github.com/bluet/docker-jottacloud) with some minor improvements
