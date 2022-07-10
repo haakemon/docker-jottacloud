@@ -19,7 +19,7 @@ You should ensure that `/etc/timezone` and `/etc/localtime` are set to the corre
       #- JOTTA_TOKEN=Secret # Prefer using secrets file instead
       - JOTTA_DEVICE=DeviceName
       - JOTTA_SCANINTERVAL=30m
-      - GLOBAL_IGNORE="comma-separated,paths-to-ignore,globally"
+      - GLOBAL_IGNORE=comma-separated,paths-to-ignore,globally # without quotes
     secrets:
       - jotta_token
     networks:
