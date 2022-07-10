@@ -3,11 +3,11 @@ FROM ubuntu:22.04
 VOLUME [ "/data" ]
 
 ENV JOTTA_TOKEN="**None**" \
-	JOTTA_DEVICE="**docker-jottacloud**" \
-	JOTTA_SCANINTERVAL="12h"\
-	LOCALTIME="Europe/Oslo" \
-	STARTUP_TIMEOUT=15 \
-	JOTTAD_SYSTEMD=0
+    JOTTA_DEVICE="**docker-jottacloud**" \
+    JOTTA_SCANINTERVAL="12h"\
+    GLOBAL_IGNORE=""\
+    STARTUP_TIMEOUT=15 \
+    JOTTAD_SYSTEMD=0
 
 RUN apt-get update -y &&\
 	apt-get upgrade -y &&\
