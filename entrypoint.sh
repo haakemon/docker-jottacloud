@@ -1,10 +1,6 @@
 #!/bin/bash
 set -e
 
-# set timezone
-rm /etc/localtime
-ln -s /usr/share/zoneinfo/$LOCALTIME /etc/localtime
-
 # execute bash if given
 if [ $# -eq 1 ] && [ "$@" = "bash" ]; then
   exec "$@"
@@ -14,7 +10,6 @@ if test -f "$JOTTA_TOKEN_FILE"; then
   JOTTA_TOKEN=`cat $JOTTA_TOKEN_FILE`
 fi
 
-# chown jottad /var/lib/jottad -R
 mkdir -p /data/jottad
 ln -sfn /data/jottad /root/.jottad
 mkdir -p /root/.config/jotta-cli
@@ -106,13 +101,18 @@ echo "Adding backups"
 
 for dir in /backup/* ; do if [ -d "${dir}" ]; then set +e && jotta-cli add /$dir && set -e; fi; done
 
-# load ignore file
 if [ -f /config/ignorefile ]; then
   echo "loading ignore file"
   jotta-cli ignores set /config/ignorefile
 fi
 
-# set scan interval
+echo "Global ignore list: $GLOBAL_IGNORE"
+for i in ${GLOBAL_IGNORE//,/ }
+do
+  echo "Adding $i to global ignore"
+  jotta-cli ignores add --pattern "$i"
+done
+
 echo "Setting scan interval"
 jotta-cli config set scaninterval $JOTTA_SCANINTERVAL
 
