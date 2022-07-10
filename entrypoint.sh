@@ -104,7 +104,7 @@ for dir in /backup/* ; do if [ -d "${dir}" ]; then set +e && jotta-cli add /$dir
 for i in ${GLOBAL_IGNORE//,/ }
 do
   echo "Adding $i to global ignore"
-  jotta-cli ignores add --pattern "$i"
+  jotta-cli ignores add --pattern $i
 done
 
 jotta-cli ignores use-version-2
