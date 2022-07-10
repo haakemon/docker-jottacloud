@@ -101,17 +101,13 @@ echo "Adding backups"
 
 for dir in /backup/* ; do if [ -d "${dir}" ]; then set +e && jotta-cli add /$dir && set -e; fi; done
 
-if [ -f /config/ignorefile ]; then
-  echo "loading ignore file"
-  jotta-cli ignores set /config/ignorefile
-fi
-
-echo "Global ignore list: $GLOBAL_IGNORE"
 for i in ${GLOBAL_IGNORE//,/ }
 do
   echo "Adding $i to global ignore"
   jotta-cli ignores add --pattern "$i"
 done
+
+jotta-cli ignores use-version-2
 
 echo "Setting scan interval"
 jotta-cli config set scaninterval $JOTTA_SCANINTERVAL

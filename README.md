@@ -37,7 +37,6 @@ You should ensure that `/etc/timezone` and `/etc/localtime` are set to the corre
 Path | Description
 ------------ | -------------
 /data/jottad | Config and data. In order to keep login status and track backup progress, please use a persistent volume.
-/data/jottad/.ignore | Global exclude file - DEPRECATED, will be removed in a future version
 /backup/ | Data you want to backup.
 
 ## ENV variables
