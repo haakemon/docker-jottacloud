@@ -7,7 +7,7 @@ if [ $# -eq 1 ] && [ "$@" = "bash" ]; then
 fi
 
 if test -f "$JOTTA_TOKEN_FILE"; then
-  JOTTA_TOKEN=`cat $JOTTA_TOKEN_FILE`
+  JOTTA_TOKEN=$(cat $JOTTA_TOKEN_FILE)
 fi
 
 mkdir -p /data/jottad
@@ -31,7 +31,7 @@ while :; do
   timeout 1 jotta-cli status >/dev/null 2>&1
   R=$?
 
-  if [ $R -eq 0 ] ; then
+  if [ $R -eq 0 ]; then
     echo "Jotta started."
     break
   fi
@@ -96,13 +96,11 @@ while :; do
   sleep 1
 done
 
-
 echo "Adding backups"
 
-for dir in /backup/* ; do if [ -d "${dir}" ]; then set +e && jotta-cli add /$dir && set -e; fi; done
+for dir in /backup/*; do if [ -d "${dir}" ]; then set +e && jotta-cli add /$dir && set -e; fi; done
 
-for i in ${GLOBAL_IGNORE//,/ }
-do
+for i in ${GLOBAL_IGNORE//,/ }; do
   echo "Adding $i to global ignore"
   jotta-cli ignores add --pattern $i
 done
@@ -115,11 +113,10 @@ jotta-cli config set scaninterval $JOTTA_SCANINTERVAL
 jotta-cli tail &
 
 R=0
-while [[ $R -eq 0 ]]
-do
-	sleep 15
-	jotta-cli status >/dev/null 2>&1
-        R=$?
+while [[ $R -eq 0 ]]; do
+  sleep 15
+  jotta-cli status >/dev/null 2>&1
+  R=$?
 done
 
 echo "Exiting:"
