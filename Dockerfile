@@ -11,6 +11,7 @@ ENV JOTTA_TOKEN="" \
 
 RUN apt-get update -y \
   && apt-get upgrade -y \
+  && apt-get -y install expect \
   && apt-get -y install curl apt-transport-https ca-certificates \
   && curl -fsSL https://repo.jotta.us/public.asc -o /usr/share/keyrings/jotta.gpg \
   && echo "deb [signed-by=/usr/share/keyrings/jotta.gpg] https://repo.jotta.us/debian debian main" | tee /etc/apt/sources.list.d/jotta-cli.list \
