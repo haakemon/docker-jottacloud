@@ -6,8 +6,18 @@ if [ $# -eq 1 ] && [ "$@" = "bash" ]; then
   exec "$@"
 fi
 
-if test -f "$JOTTA_TOKEN_FILE"; then
-  JOTTA_TOKEN=`cat $JOTTA_TOKEN_FILE`
+if [ -f "$JOTTA_TOKEN_FILE" ]; then
+  JOTTA_TOKEN=$(cat "$JOTTA_TOKEN_FILE")
+fi
+
+if [ -z "$JOTTA_TOKEN" ]; then
+  echo "Error: Environment variable \$JOTTA_TOKEN or \$JOTTA_TOKEN_FILE is not set."
+  exit 1
+fi
+
+if [ -z "$JOTTA_DEVICE" ]; then
+  echo "Error: Environment variable \$JOTTA_DEVICE is not set."
+  exit 1
 fi
 
 mkdir -p /data/jottad
@@ -31,7 +41,7 @@ while :; do
   timeout 1 jotta-cli status >/dev/null 2>&1
   R=$?
 
-  if [ $R -eq 0 ] ; then
+  if [ $R -eq 0 ]; then
     echo "Jotta started."
     break
   fi
@@ -96,18 +106,16 @@ while :; do
   sleep 1
 done
 
-
 echo "Adding backups"
 
-for dir in /backup/* ; do if [ -d "${dir}" ]; then set +e && jotta-cli add /$dir && set -e; fi; done
+for dir in /backup/*; do if [ -d "${dir}" ]; then set +e && jotta-cli add /$dir && set -e; fi; done
 
-for i in ${GLOBAL_IGNORE//,/ }
-do
+jotta-cli ignores use-version-2
+
+for i in ${GLOBAL_IGNORE//,/ }; do
   echo "Adding $i to global ignore"
   jotta-cli ignores add --pattern $i
 done
-
-jotta-cli ignores use-version-2
 
 echo "Setting scan interval"
 jotta-cli config set scaninterval $JOTTA_SCANINTERVAL
@@ -115,11 +123,10 @@ jotta-cli config set scaninterval $JOTTA_SCANINTERVAL
 jotta-cli tail &
 
 R=0
-while [[ $R -eq 0 ]]
-do
-	sleep 15
-	jotta-cli status >/dev/null 2>&1
-        R=$?
+while [[ $R -eq 0 ]]; do
+  sleep 15
+  jotta-cli status >/dev/null 2>&1
+  R=$?
 done
 
 echo "Exiting:"
