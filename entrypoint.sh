@@ -6,8 +6,18 @@ if [ $# -eq 1 ] && [ "$@" = "bash" ]; then
   exec "$@"
 fi
 
-if test -f "$JOTTA_TOKEN_FILE"; then
-  JOTTA_TOKEN=$(cat $JOTTA_TOKEN_FILE)
+if [ -f "$JOTTA_TOKEN_FILE" ]; then
+  JOTTA_TOKEN=$(cat "$JOTTA_TOKEN_FILE")
+fi
+
+if [ -z "$JOTTA_TOKEN" ]; then
+  echo "Error: Environment variable \$JOTTA_TOKEN or \$JOTTA_TOKEN_FILE is not set."
+  exit 1
+fi
+
+if [ -z "$JOTTA_DEVICE" ]; then
+  echo "Error: Environment variable \$JOTTA_DEVICE is not set."
+  exit 1
 fi
 
 mkdir -p /data/jottad
@@ -100,12 +110,12 @@ echo "Adding backups"
 
 for dir in /backup/*; do if [ -d "${dir}" ]; then set +e && jotta-cli add /$dir && set -e; fi; done
 
+jotta-cli ignores use-version-2
+
 for i in ${GLOBAL_IGNORE//,/ }; do
   echo "Adding $i to global ignore"
   jotta-cli ignores add --pattern $i
 done
-
-jotta-cli ignores use-version-2
 
 echo "Setting scan interval"
 jotta-cli config set scaninterval $JOTTA_SCANINTERVAL
