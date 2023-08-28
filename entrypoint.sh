@@ -106,16 +106,49 @@ while :; do
   sleep 1
 done
 
-echo "Adding backups"
+remove_ignores() {
+  local output
+  local trimmed_entries
 
-for dir in /backup/*; do if [ -d "${dir}" ]; then set +e && jotta-cli add /$dir && set -e; fi; done
+  # Capture output of the ignores list command, it pipes to stderr for some reason
+  output=$(jotta-cli ignores list 2>&1 >/dev/null)
 
+  # Extract lines starting with " > ", trim them, and remove duplicates
+  trimmed_entries=$(echo "$output" | grep -o ' > .*' | sed 's/^ > //g' | sort -u)
+
+  # Loop through each trimmed entry and execute your desired command
+  while IFS= read -r entry; do
+    echo "Removing ignore pattern: $entry"
+    jotta-cli ignores rem --pattern $entry
+  done <<<"$trimmed_entries"
+}
+
+add_ignores() {
+  for i in ${GLOBAL_IGNORE//,/ }; do
+    echo "Adding ignore pattern: $i"
+    jotta-cli ignores add --pattern $i
+  done
+}
+
+add_backups() {
+  echo "Adding backups"
+  for dir in /backup/*; do
+    if [ -d "${dir}" ]; then
+      set +e
+      jotta-cli add "/$dir"
+      set -e
+    fi
+  done
+}
+
+# Because we have no good way of removing stuff from the GLOBAL_IGNORE list,
+# we remove all current ignored entries and re-add them using the GLOBAL_IGNORE list.
+# That way we should just be left with stuff we actually want to ignore.
 jotta-cli ignores use-version-2
+remove_ignores
+add_ignores
 
-for i in ${GLOBAL_IGNORE//,/ }; do
-  echo "Adding $i to global ignore"
-  jotta-cli ignores add --pattern $i
-done
+add_backups
 
 echo "Setting scan interval"
 jotta-cli config set scaninterval $JOTTA_SCANINTERVAL
