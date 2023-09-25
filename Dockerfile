@@ -16,7 +16,7 @@ RUN apt-get update -y \
   && curl -fsSL https://repo.jotta.us/public.asc -o /usr/share/keyrings/jotta.gpg \
   && echo "deb [signed-by=/usr/share/keyrings/jotta.gpg] https://repo.jotta.us/debian debian main" | tee /etc/apt/sources.list.d/jotta-cli.list \
   && apt-get update -y \
-  && apt-get install -y jotta-cli=0.15.89752 \
+  && apt-get install -y jotta-cli=0.15.91862 \
   && apt-get autoremove -y --purge \
   && apt-get clean \
   && rm -rf /var/lib/lists/*
