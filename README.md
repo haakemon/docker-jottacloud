@@ -1,4 +1,9 @@
 # Dockerized Jottacloud Client
+
+> [!NOTE]
+> I no longer use Jottacloud with Docker, so I will no longer maintain this repository.
+> Check out [bluet/docker-jottacloud](https://github.com/bluet/docker-jottacloud) which seems to still be maintained.
+
 Docker of Jottacloud client side backup daemon with jotta-cli and jottad inside.
 
 Jottacloud is a Cloud Storage (backup) service provider, which offers [unlimited storage space](https://www.jottacloud.com/en/pricing.html) for personal use.
